@@ -228,6 +228,41 @@
             border-left: 5px solid #667eea;
         }
 
+        .voice-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .voice-header h4 {
+            margin: 0;
+            color: #333;
+            font-size: 1em;
+        }
+
+        .info-icon {
+            width: 24px;
+            height: 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+
+        .info-icon:hover {
+            background: #764ba2;
+            transform: scale(1.1);
+        }
+
         .voice-section,
         .manual-section {
             margin-bottom: 25px;
@@ -329,7 +364,6 @@
             background: #e3f2fd;
             padding: 15px;
             border-radius: 8px;
-            margin-top: 15px;
             border-left: 4px solid #2196f3;
         }
 
@@ -337,10 +371,89 @@
             color: #1565c0;
             font-size: 0.9em;
             line-height: 1.6;
+            margin: 8px 0;
+        }
+
+        .info-box p:first-child {
+            margin-top: 0;
         }
 
         .info-box strong {
             color: #0d47a1;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            border: none;
+            padding: 0;
+            color: #667eea;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #667eea;
+            cursor: pointer;
+            padding: 0;
+            box-shadow: none;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            color: #764ba2;
         }
 
         /* Records Table Styles */
@@ -573,6 +686,10 @@
             .stat-box .stat-value {
                 font-size: 1.8em;
             }
+
+            .modal-content {
+                width: 95%;
+            }
         }
     </style>
 </head>
@@ -609,11 +726,12 @@
 
             <!-- Voice and Manual Entry Section -->
             <div class="input-methods">
-                <h3>🎤 Voice Commands & Manual Entry</h3>
-                
                 <!-- Voice Commands -->
                 <div class="voice-section">
-                    <h4 style="color: #333; margin-bottom: 10px;">Voice Commands</h4>
+                    <div class="voice-header">
+                        <h4>🎤 Voice Commands</h4>
+                        <button class="info-icon" onclick="openModal()" title="Voice commands help">?</button>
+                    </div>
                     <div class="voice-controls">
                         <button class="voice-btn" id="voiceTimeInBtn" onclick="startVoiceCommand('in')">
                             🎤 Voice Time In
@@ -623,18 +741,11 @@
                         </button>
                     </div>
                     <div class="voice-status" id="voiceStatus"></div>
-                    
-                    <div class="info-box">
-                        <p><strong>Voice Commands:</strong> Click the microphone button and say:</p>
-                        <p>• "Time in" or "Clock in" - Records current time as Time In</p>
-                        <p>• "Time out" or "Clock out" - Records current time as Time Out</p>
-                        <p>• Or say a specific time like "9:30 AM" or "5:45 PM"</p>
-                    </div>
                 </div>
 
                 <!-- Manual Time Entry -->
                 <div class="manual-section">
-                    <h4 style="color: #333; margin-bottom: 10px; margin-top: 20px;">Manual Time Entry</h4>
+                    <h4 style="color: #333; margin-bottom: 10px; margin-top: 20px;">✏️ Manual Time Entry</h4>
                     <div class="manual-inputs">
                         <div class="manual-input-group">
                             <label for="manualTimeIn">Set Time In:</label>
@@ -718,6 +829,27 @@
         </div>
     </div>
 
+    <!-- Voice Commands Info Modal -->
+    <div id="voiceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎤 Voice Commands</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="info-box">
+                <p><strong>How to use Voice Commands:</strong></p>
+                <p>1. Click the "Voice Time In" or "Voice Time Out" button</p>
+                <p>2. Grant microphone permission when prompted</p>
+                <p>3. Speak clearly into your microphone</p>
+                <p><strong>Supported commands:</strong></p>
+                <p>• "Time in" or "Clock in" - Records current time as Time In</p>
+                <p>• "Time out" or "Clock out" - Records current time as Time Out</p>
+                <p>• Or say a specific time like "9:30 AM" or "5:45 PM"</p>
+                <p><strong>Note:</strong> Voice recognition works best in Chrome, Edge, or Safari browsers.</p>
+            </div>
+        </div>
+    </div>
+
     <script>
         let currentDate = getTodayDateString();
         let todayEntries = [];
@@ -726,6 +858,22 @@
         let isFiltered = false;
         let recognition = null;
         let currentVoiceMode = null;
+
+        // Modal Functions
+        function openModal() {
+            document.getElementById('voiceModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('voiceModal').classList.remove('show');
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('voiceModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
 
         // Initialize Speech Recognition
         function initializeSpeechRecognition() {
@@ -927,7 +1075,6 @@
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
             
-            // Check if date changed
             const newDate = getTodayDateString();
             if (newDate !== currentDate) {
                 currentDate = newDate;
@@ -992,13 +1139,33 @@
             const saveBtn = document.getElementById('saveBtn');
             const entriesContainer = document.getElementById('entriesContainer');
             const entriesList = document.getElementById('entriesList');
+            const timeInDisplay = document.getElementById('timeInDisplay');
+            const timeOutDisplay = document.getElementById('timeOutDisplay');
 
             if (todayEntries.length === 0) {
                 durationEl.textContent = '--:--:--';
                 detailsEl.textContent = 'Click "Time In" to start tracking';
                 saveBtn.disabled = true;
                 entriesContainer.style.display = 'none';
+                timeInDisplay.textContent = 'Not set';
+                timeInDisplay.classList.add('not-set');
+                timeOutDisplay.textContent = 'Not set';
+                timeOutDisplay.classList.add('not-set');
                 return;
+            }
+
+            // Update time displays with last entry
+            const lastEntry = todayEntries[todayEntries.length - 1];
+            if (lastEntry.timeIn) {
+                timeInDisplay.textContent = formatTime(lastEntry.timeIn);
+                timeInDisplay.classList.remove('not-set');
+            }
+            if (lastEntry.timeOut) {
+                timeOutDisplay.textContent = formatTime(lastEntry.timeOut);
+                timeOutDisplay.classList.remove('not-set');
+            } else {
+                timeOutDisplay.textContent = 'Not set';
+                timeOutDisplay.classList.add('not-set');
             }
 
             // Calculate total duration from all complete entries
@@ -1054,15 +1221,12 @@
             if (existingIndex >= 0) {
                 const choice = confirm('A record for today already exists. Click OK to ADD new entries, or Cancel to REPLACE.');
                 if (!choice) {
-                    // Replace mode - remove existing
                     allRecords.splice(existingIndex, 1);
                 } else {
-                    // Add mode - append entries
                     completeEntries.forEach(e => {
                         allRecords[existingIndex].entries.push({ timeIn: e.timeIn.toISOString(), timeOut: e.timeOut.toISOString() });
                     });
                     
-                    // Recalculate total duration
                     let totalMs = 0;
                     allRecords[existingIndex].entries.forEach(entry => {
                         const diff = new Date(entry.timeOut) - new Date(entry.timeIn);
@@ -1231,10 +1395,8 @@
             const saved = localStorage.getItem('timeRecords');
             if (saved && JSON.parse(saved).length > 0) {
                 allRecords = JSON.parse(saved);
-                // Ensure all records have proper structure
                 allRecords = allRecords.map(record => {
                     if (!record.entries) {
-                        // Legacy format migration
                         const diff = new Date(record.timeOut) - new Date(record.timeIn);
                         return {
                             date: record.date,
@@ -1245,7 +1407,6 @@
                     return record;
                 });
             } else {
-                // Seed random data for last 3 months
                 seedRandomData();
             }
             loadTodayData();
@@ -1271,20 +1432,19 @@
                 const date = new Date(now);
                 date.setDate(date.getDate() - i);
                 
-                // Skip weekends
                 if (date.getDay() === 0 || date.getDay() === 6) continue;
 
                 const dateStr = date.toISOString().split('T')[0];
                 const numEntries = Math.random() > 0.7 ? 2 : 1;
                 const entries = [];
 
-                let currentHour = 8 + Math.floor(Math.random() * 2); // 8-9 AM start
+                let currentHour = 8 + Math.floor(Math.random() * 2);
                 for (let j = 0; j < numEntries; j++) {
                     const timeInDate = new Date(date);
                     timeInDate.setHours(currentHour, Math.floor(Math.random() * 60), 0, 0);
                     
                     const timeOutDate = new Date(timeInDate);
-                    const duration = 4 + Math.floor(Math.random() * 5); // 4-8 hours per entry
+                    const duration = 4 + Math.floor(Math.random() * 5);
                     timeOutDate.setHours(timeOutDate.getHours() + duration, Math.floor(Math.random() * 60), 0, 0);
 
                     entries.push({
@@ -1292,7 +1452,7 @@
                         timeOut: timeOutDate.toISOString()
                     });
 
-                    currentHour = timeOutDate.getHours() + 1 + Math.floor(Math.random() * 2); // Break between entries
+                    currentHour = timeOutDate.getHours() + 1 + Math.floor(Math.random() * 2);
                 }
 
                 let totalMs = 0;
@@ -1317,7 +1477,6 @@
         loadRecords();
         initializeSpeechRecognition();
         
-        // Set default filter dates (last 30 days)
         const today = new Date();
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -1325,7 +1484,6 @@
         document.getElementById('filterTo').value = today.toISOString().split('T')[0];
         document.getElementById('filterFrom').value = thirtyDaysAgo.toISOString().split('T')[0];
         
-        // Update date display every minute
         setInterval(() => {
             updateDateDisplay();
         }, 60000);
