@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .date-display {
+            text-align: center;
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .time-box {
+            flex: 1;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .time-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .time-box .time {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .time-box .time.not-set {
+            color: #999;
+            font-style: italic;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+        }
+
+        .time-in-btn {
+            background: #28a745;
+        }
+
+        .time-in-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .time-out-btn {
+            background: #dc3545;
+        }
+
+        .time-out-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        .reset-btn {
+            width: 100%;
+            padding: 15px;
+            background: #6c757d;
+            margin-bottom: 20px;
+        }
+
+        .reset-btn:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 15px;
+            background: #007bff;
+            margin-bottom: 30px;
+        }
+
+        .save-btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+        }
+
+        .save-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .difference-display {
+            padding: 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .difference-display h2 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            color: white;
+        }
+
+        .difference-display .duration {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .difference-display .details {
+            margin-top: 15px;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        /* Voice and Manual Entry Styles */
+        .input-methods {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #667eea;
+        }
+
+        .voice-section, .manual-section {
+            margin-bottom: 20px;
+        }
+
+        .voice-section:last-child, .manual-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .voice-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .voice-btn {
+            flex: 1;
+            padding: 15px;
+            background: #9c27b0;
+            font-size: 1em;
+        }
+
+        .voice-btn:hover {
+            background: #7b1fa2;
+        }
+
+        .voice-btn.listening {
+            background: #e91e63;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .voice-status {
+            text-align: center;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .voice-status.active {
+            display: block;
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .voice-status.listening {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .voice-status.success {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .voice-status.error {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        .manual-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .manual-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .manual-input-group label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .manual-input-group input[type="time"] {
+            padding: 12px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+        }
+
+        .manual-input-group button {
+            padding: 12px;
+            font-size: 1em;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .info-box p {
+            color: #1565c0;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        .info-box strong {
+            color: #0d47a1;
+        }
+
+        /* Records Table Styles */
+        .records-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .filter-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-section label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .filter-section input[type="date"] {
+            padding: 10px 15px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .filter-section button {
+            padding: 10px 20px;
+            font-size: 1em;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        table tbody tr:hover {
+            background: #f5f5f5;
+        }
+
+        .no-records {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 1.2em;
+        }
+
+        .delete-btn {
+            padding: 5px 10px;
+            font-size: 0.9em;
+            background: #dc3545;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-box .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-box .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container, .records-container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            .time-display {
+                flex-direction: column;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            button {
+                padding: 15px;
+                font-size: 1em;
+            }
+
+            .difference-display .duration {
+                font-size: 2em;
+            }
+
+            .filter-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-section input,
+            .filter-section button {
+                width: 100%;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            table th,
+            table td {
+                padding: 10px 5px;
+            }
+
+            .manual-inputs {
+                grid-template-columns: 1fr;
+            }
+
+            .voice-controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Time Tracker Section -->
+        <div class="container">
+            <h1>⏰ Time Tracker</h1>
+            
+            <div class="date-display">
+                📅 <span id="currentDate"></span>
+            </div>
+
+            <div class="time-display">
+                <div class="time-box">
+                    <h3>Time In</h3>
+                    <div class="time not-set" id="timeInDisplay">Not set</div>
+                </div>
+                <div class="time-box">
+                    <h3>Time Out</h3>
+                    <div class="time not-set" id="timeOutDisplay">Not set</div>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button class="time-in-btn" onclick="setTimeIn()">⏱️ Time In (Now)</button>
+                <button class="time-out-btn" onclick="setTimeOut()">🛑 Time Out (Now)</button>
+            </div>
+
+            <!-- Voice and Manual Entry Section -->
+            <div class="input-methods">
+                <h3>🎤 Voice Commands & Manual Entry</h3>
+                
+                <!-- Voice Commands -->
+                <div class="voice-section">
+                    <h4 style="color: #333; margin-bottom: 10px;">Voice Commands</h4>
+                    <div class="voice-controls">
+                        <button class="voice-btn" id="voiceTimeInBtn" onclick="startVoiceCommand('in')">
+                            🎤 Voice Time In
+                        </button>
+                        <button class="voice-btn" id="voiceTimeOutBtn" onclick="startVoiceCommand('out')">
+                            🎤 Voice Time Out
+                        </button>
+                    </div>
+                    <div class="voice-status" id="voiceStatus"></div>
+                    
+                    <div class="info-box">
+                        <p><strong>Voice Commands:</strong> Click the microphone button and say:</p>
+                        <p>• "Time in" or "Clock in" - Records current time as Time In</p>
+                        <p>• "Time out" or "Clock out" - Records current time as Time Out</p>
+                        <p>• Or say a specific time like "9:30 AM" or "5:45 PM"</p>
+                    </div>
+                </div>
+
+                <!-- Manual Time Entry -->
+                <div class="manual-section">
+                    <h4 style="color: #333; margin-bottom: 10px; margin-top: 20px;">Manual Time Entry</h4>
+                    <div class="manual-inputs">
+                        <div class="manual-input-group">
+                            <label for="manualTimeIn">Set Time In:</label>
+                            <input type="time" id="manualTimeIn">
+                            <button class="time-in-btn" onclick="setManualTimeIn()">Set Time In</button>
+                        </div>
+                        <div class="manual-input-group">
+                            <label for="manualTimeOut">Set Time Out:</label>
+                            <input type="time" id="manualTimeOut">
+                            <button class="time-out-btn" onclick="setManualTimeOut()">Set Time Out</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="reset-btn" onclick="resetTimes()">🔄 Reset Today</button>
+
+            <div class="difference-display">
+                <h2>Time Difference</h2>
+                <div class="duration" id="durationDisplay">--:--:--</div>
+                <div class="details" id="detailsDisplay">Click "Time In" to start tracking</div>
+            </div>
+
+            <button class="save-btn" id="saveBtn" onclick="saveRecord()" disabled>💾 Save Today's Record</button>
+        </div>
+
+        <!-- Records Table Section -->
+        <div class="records-container">
+            <h2>📊 Time Records</h2>
+
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div class="stat-value" id="totalRecords">0</div>
+                    <div class="stat-label">Total Records</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="avgDuration">0h 0m</div>
+                    <div class="stat-label">Average Duration</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="totalHours">0h</div>
+                    <div class="stat-label">Total Hours</div>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <label for="filterFrom">From:</label>
+                <input type="date" id="filterFrom">
+                
+                <label for="filterTo">To:</label>
+                <input type="date" id="filterTo">
+                
+                <button onclick="applyFilter()">🔍 Apply Filter</button>
+                <button onclick="clearFilter()">✖️ Clear Filter</button>
+                <button class="reset-btn" onclick="clearAllRecords()">🗑️ Clear All Records</button>
+            </div>
+
+            <div class="table-wrapper">
+                <table id="recordsTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                            <th>Duration</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recordsBody">
+                        <tr>
+                            <td colspan="5" class="no-records">No records found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let timeIn = null;
+        let timeOut = null;
+        let records = [];
+        let filteredRecords = [];
+        let isFiltered = false;
+        let recognition = null;
+        let currentVoiceMode = null;
+
+        // Initialize Speech Recognition
+        function initializeSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'en-US';
+
+                recognition.onstart = function() {
+                    updateVoiceStatus('Listening... Speak now!', 'listening');
+                    const btn = currentVoiceMode === 'in' ? document.getElementById('voiceTimeInBtn') : document.getElementById('voiceTimeOutBtn');
+                    btn.classList.add('listening');
+                };
+
+                recognition.onend = function() {
+                    const btn = currentVoiceMode === 'in' ? document.getElementById('voiceTimeInBtn') : document.getElementById('voiceTimeOutBtn');
+                    btn.classList.remove('listening');
+                };
+
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript.toLowerCase().trim();
+                    processVoiceCommand(transcript);
+                };
+
+                recognition.onerror = function(event) {
+                    updateVoiceStatus('Error: ' + event.error + '. Please try again.', 'error');
+                    setTimeout(() => hideVoiceStatus(), 3000);
+                };
+            } else {
+                console.log('Speech recognition not supported');
+            }
+        }
+
+        // Start voice command
+        function startVoiceCommand(mode) {
+            if (!recognition) {
+                alert('Speech recognition is not supported in your browser. Please use Chrome, Edge, or Safari.');
+                return;
+            }
+
+            currentVoiceMode = mode;
+            updateVoiceStatus('Preparing to listen...', 'active');
+            
+            try {
+                recognition.start();
+            } catch (e) {
+                console.error('Recognition error:', e);
+                updateVoiceStatus('Please wait a moment and try again.', 'error');
+                setTimeout(() => hideVoiceStatus(), 2000);
+            }
+        }
+
+        // Process voice command
+        function processVoiceCommand(transcript) {
+            console.log('Voice command:', transcript);
+            
+            // Check for time in/out commands
+            if (transcript.includes('time in') || transcript.includes('clock in') || transcript.includes('start')) {
+                setTimeIn();
+                updateVoiceStatus('✓ Time In recorded!', 'success');
+                setTimeout(() => hideVoiceStatus(), 2000);
+                return;
+            }
+            
+            if (transcript.includes('time out') || transcript.includes('clock out') || transcript.includes('stop') || transcript.includes('end')) {
+                setTimeOut();
+                updateVoiceStatus('✓ Time Out recorded!', 'success');
+                setTimeout(() => hideVoiceStatus(), 2000);
+                return;
+            }
+
+            // Try to parse time from speech
+            const parsedTime = parseTimeFromSpeech(transcript);
+            if (parsedTime) {
+                if (currentVoiceMode === 'in') {
+                    setManualTime(parsedTime, 'in');
+                    updateVoiceStatus(`✓ Time In set to ${formatTime(parsedTime)}`, 'success');
+                } else {
+                    setManualTime(parsedTime, 'out');
+                    updateVoiceStatus(`✓ Time Out set to ${formatTime(parsedTime)}`, 'success');
+                }
+                setTimeout(() => hideVoiceStatus(), 2000);
+            } else {
+                updateVoiceStatus('Could not understand time. Say "time in/out" or a specific time like "9:30 AM"', 'error');
+                setTimeout(() => hideVoiceStatus(), 4000);
+            }
+        }
+
+        // Parse time from speech
+        function parseTimeFromSpeech(text) {
+            // Remove common filler words
+            text = text.replace(/\b(at|to)\b/gi, '').trim();
+            
+            // Try to match various time formats
+            // Format: "9:30 AM" or "9 30 AM" or "nine thirty AM"
+            const timeRegex = /(\d{1,2})[:\s]?(\d{2})?\s*(am|pm|a\.m\.|p\.m\.)?/i;
+            const match = text.match(timeRegex);
+            
+            if (match) {
+                let hours = parseInt(match[1]);
+                let minutes = match[2] ? parseInt(match[2]) : 0;
+                const meridiem = match[3] ? match[3].toLowerCase().replace(/\./g, '') : null;
+                
+                // Convert to 24-hour format if meridiem is specified
+                if (meridiem) {
+                    if (meridiem.startsWith('pm') && hours < 12) {
+                        hours += 12;
+                    } else if (meridiem.startsWith('am') && hours === 12) {
+                        hours = 0;
+                    }
+                }
+                
+                // Create date object with parsed time
+                const now = new Date();
+                now.setHours(hours, minutes, 0, 0);
+                return now;
+            }
+            
+            return null;
+        }
+
+        // Update voice status display
+        function updateVoiceStatus(message, type) {
+            const status = document.getElementById('voiceStatus');
+            status.textContent = message;
+            status.className = 'voice-status ' + type;
+        }
+
+        // Hide voice status
+        function hideVoiceStatus() {
+            const status = document.getElementById('voiceStatus');
+            status.className = 'voice-status';
+        }
+
+        // Set manual time
+        function setManualTime(date, mode) {
+            if (mode === 'in') {
+                timeIn = date;
+                document.getElementById('timeInDisplay').textContent = formatTime(timeIn);
+                document.getElementById('timeInDisplay').classList.remove('not-set');
+                
+                // Reset Time Out when setting a new Time In
+                if (timeOut) {
+                    timeOut = null;
+                    document.getElementById('timeOutDisplay').textContent = 'Not set';
+                    document.getElementById('timeOutDisplay').classList.add('not-set');
+                }
+            } else {
+                if (!timeIn) {
+                    alert('Please set Time In first!');
+                    return;
+                }
+                
+                if (date < timeIn) {
+                    alert('Time Out cannot be before Time In!');
+                    return;
+                }
+                
+                timeOut = date;
+                document.getElementById('timeOutDisplay').textContent = formatTime(timeOut);
+                document.getElementById('timeOutDisplay').classList.remove('not-set');
+            }
+            
+            updateDisplay();
+        }
+
+        // Manual time entry functions
+        function setManualTimeIn() {
+            const timeInput = document.getElementById('manualTimeIn').value;
+            if (!timeInput) {
+                alert('Please select a time');
+                return;
+            }
+            
+            const [hours, minutes] = timeInput.split(':');
+            const date = new Date();
+            date.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+            
+            setManualTime(date, 'in');
+        }
+
+        function setManualTimeOut() {
+            const timeInput = document.getElementById('manualTimeOut').value;
+            if (!timeInput) {
+                alert('Please select a time');
+                return;
+            }
+            
+            const [hours, minutes] = timeInput.split(':');
+            const date = new Date();
+            date.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+            
+            setManualTime(date, 'out');
+        }
+
+        // Load records from localStorage
+        function loadRecords() {
+            const saved = localStorage.getItem('timeRecords');
+            if (saved) {
+                records = JSON.parse(saved);
+            }
+            loadTodayData();
+            displayRecords();
+        }
+
+        // Save records to localStorage
+        function saveRecords() {
+            localStorage.setItem('timeRecords', JSON.stringify(records));
+        }
+
+        // Load today's data if exists
+        function loadTodayData() {
+            const today = getTodayDateString();
+            const todayRecord = records.find(r => r.date === today);
+            
+            if (todayRecord) {
+                timeIn = new Date(todayRecord.timeIn);
+                timeOut = new Date(todayRecord.timeOut);
+                
+                document.getElementById('timeInDisplay').textContent = formatTime(timeIn);
+                document.getElementById('timeInDisplay').classList.remove('not-set');
+                
+                document.getElementById('timeOutDisplay').textContent = formatTime(timeOut);
+                document.getElementById('timeOutDisplay').classList.remove('not-set');
+                
+                updateDisplay();
+            }
+        }
+
+        // Get today's date as string (YYYY-MM-DD)
+        function getTodayDateString() {
+            const now = new Date();
+            return now.toISOString().split('T')[0];
+        }
+
+        // Update current date display
+        function updateDateDisplay() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        // Format time for display (HH:MM:SS)
+        function formatTime(date) {
+            return date.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: true
+            });
+        }
+
+        // Format date for display
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const today = getTodayDateString();
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+            if (dateStr === today) {
+                return 'Today';
+            } else if (dateStr === yesterdayStr) {
+                return 'Yesterday';
+            } else {
+                return date.toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                });
+            }
+        }
+
+        // Calculate time difference
+        function calculateDifference(timeInDate = timeIn, timeOutDate = timeOut) {
+            if (!timeInDate || !timeOutDate) return null;
+
+            const diff = timeOutDate - timeInDate;
+            if (diff < 0) return null;
+
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            return { hours, minutes, seconds, totalMilliseconds: diff };
+        }
+
+        // Format duration display
+        function formatDuration(hours, minutes, seconds) {
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        // Set Time In
+        function setTimeIn() {
+            timeIn = new Date();
+            document.getElementById('timeInDisplay').textContent = formatTime(timeIn);
+            document.getElementById('timeInDisplay').classList.remove('not-set');
+            
+            // Reset Time Out when setting a new Time In
+            if (timeOut) {
+                timeOut = null;
+                document.getElementById('timeOutDisplay').textContent = 'Not set';
+                document.getElementById('timeOutDisplay').classList.add('not-set');
+            }
+            
+            updateDisplay();
+        }
+
+        // Set Time Out
+        function setTimeOut() {
+            if (!timeIn) {
+                alert('Please set Time In first!');
+                return;
+            }
+
+            timeOut = new Date();
+            
+            if (timeOut < timeIn) {
+                alert('Time Out cannot be before Time In!');
+                timeOut = null;
+                return;
+            }
+
+            document.getElementById('timeOutDisplay').textContent = formatTime(timeOut);
+            document.getElementById('timeOutDisplay').classList.remove('not-set');
+            updateDisplay();
+        }
+
+        // Reset today's times
+        function resetTimes() {
+            if (timeIn || timeOut) {
+                if (!confirm('Are you sure you want to reset today\'s times?')) {
+                    return;
+                }
+            }
+            
+            timeIn = null;
+            timeOut = null;
+            
+            document.getElementById('timeInDisplay').textContent = 'Not set';
+            document.getElementById('timeInDisplay').classList.add('not-set');
+            
+            document.getElementById('timeOutDisplay').textContent = 'Not set';
+            document.getElementById('timeOutDisplay').classList.add('not-set');
+            
+            // Clear manual input fields
+            document.getElementById('manualTimeIn').value = '';
+            document.getElementById('manualTimeOut').value = '';
+            
+            updateDisplay();
+        }
+
+        // Update the display
+        function updateDisplay() {
+            const durationEl = document.getElementById('durationDisplay');
+            const detailsEl = document.getElementById('detailsDisplay');
+            const saveBtn = document.getElementById('saveBtn');
+
+            if (!timeIn) {
+                durationEl.textContent = '--:--:--';
+                detailsEl.textContent = 'Click "Time In" to start tracking';
+                saveBtn.disabled = true;
+                return;
+            }
+
+            if (!timeOut) {
+                durationEl.textContent = '--:--:--';
+                detailsEl.textContent = 'Click "Time Out" to calculate duration';
+                saveBtn.disabled = true;
+                return;
+            }
+
+            const diff = calculateDifference();
+            
+            if (!diff) {
+                durationEl.textContent = 'ERROR';
+                detailsEl.textContent = 'Invalid time range';
+                saveBtn.disabled = true;
+                return;
+            }
+
+            durationEl.textContent = formatDuration(diff.hours, diff.minutes, diff.seconds);
+            
+            // Create detailed message
+            let details = [];
+            if (diff.hours > 0) details.push(`${diff.hours} hour${diff.hours !== 1 ? 's' : ''}`);
+            if (diff.minutes > 0) details.push(`${diff.minutes} minute${diff.minutes !== 1 ? 's' : ''}`);
+            if (diff.seconds > 0 || details.length === 0) details.push(`${diff.seconds} second${diff.seconds !== 1 ? 's' : ''}`);
+            
+            detailsEl.textContent = details.join(', ');
+            saveBtn.disabled = false;
+        }
+
+        // Save record
+        function saveRecord() {
+            if (!timeIn || !timeOut) {
+                alert('Please set both Time In and Time Out before saving!');
+                return;
+            }
+
+            const diff = calculateDifference();
+            if (!diff) {
+                alert('Invalid time range!');
+                return;
+            }
+
+            const today = getTodayDateString();
+            
+            // Check if record for today already exists
+            const existingIndex = records.findIndex(r => r.date === today);
+            
+            const record = {
+                date: today,
+                timeIn: timeIn.toISOString(),
+                timeOut: timeOut.toISOString(),
+                duration: diff.totalMilliseconds
+            };
+
+            if (existingIndex >= 0) {
+                if (confirm('A record for today already exists. Do you want to update it?')) {
+                    records[existingIndex] = record;
+                } else {
+                    return;
+                }
+            } else {
+                records.push(record);
+            }
+
+            // Sort records by date descending
+            records.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            saveRecords();
+            displayRecords();
+            alert('Record saved successfully!');
+        }
+
+        // Display records
+        function displayRecords() {
+            const tbody = document.getElementById('recordsBody');
+            const dataToDisplay = isFiltered ? filteredRecords : records;
+
+            // Show last 15 days by default if not filtered
+            let displayData = dataToDisplay;
+            if (!isFiltered) {
+                displayData = dataToDisplay.slice(0, 15);
+            }
+
+            if (displayData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="no-records">No records found</td></tr>';
+                updateStats([]);
+                return;
+            }
+
+            tbody.innerHTML = displayData.map(record => {
+                const timeInDate = new Date(record.timeIn);
+                const timeOutDate = new Date(record.timeOut);
+                const diff = calculateDifference(timeInDate, timeOutDate);
+
+                return `
+                    <tr>
+                        <td><strong>${formatDate(record.date)}</strong><br><small>${record.date}</small></td>
+                        <td>${formatTime(timeInDate)}</td>
+                        <td>${formatTime(timeOutDate)}</td>
+                        <td><strong>${formatDuration(diff.hours, diff.minutes, diff.seconds)}</strong></td>
+                        <td><button class="delete-btn" onclick="deleteRecord('${record.date}')">Delete</button></td>
+                    </tr>
+                `;
+            }).join('');
+
+            updateStats(dataToDisplay);
+        }
+
+        // Update statistics
+        function updateStats(data) {
+            const totalRecords = data.length;
+            document.getElementById('totalRecords').textContent = totalRecords;
+
+            if (totalRecords === 0) {
+                document.getElementById('avgDuration').textContent = '0h 0m';
+                document.getElementById('totalHours').textContent = '0h';
+                return;
+            }
+
+            const totalMs = data.reduce((sum, record) => sum + record.duration, 0);
+            const avgMs = totalMs / totalRecords;
+
+            const totalHours = Math.floor(totalMs / (1000 * 60 * 60));
+            const avgHours = Math.floor(avgMs / (1000 * 60 * 60));
+            const avgMinutes = Math.floor((avgMs % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.getElementById('avgDuration').textContent = `${avgHours}h ${avgMinutes}m`;
+            document.getElementById('totalHours').textContent = `${totalHours}h`;
+        }
+
+        // Delete record
+        function deleteRecord(date) {
+            if (!confirm('Are you sure you want to delete this record?')) {
+                return;
+            }
+
+            records = records.filter(r => r.date !== date);
+            saveRecords();
+            
+            // If today's record was deleted, reset the tracker
+            if (date === getTodayDateString()) {
+                resetTimes();
+            }
+            
+            // Reapply filter if active
+            if (isFiltered) {
+                applyFilter();
+            } else {
+                displayRecords();
+            }
+        }
+
+        // Apply filter
+        function applyFilter() {
+            const fromDate = document.getElementById('filterFrom').value;
+            const toDate = document.getElementById('filterTo').value;
+
+            if (!fromDate || !toDate) {
+                alert('Please select both From and To dates');
+                return;
+            }
+
+            if (fromDate > toDate) {
+                alert('From date cannot be after To date');
+                return;
+            }
+
+            filteredRecords = records.filter(record => {
+                return record.date >= fromDate && record.date <= toDate;
+            });
+
+            isFiltered = true;
+            displayRecords();
+        }
+
+        // Clear filter
+        function clearFilter() {
+            document.getElementById('filterFrom').value = '';
+            document.getElementById('filterTo').value = '';
+            isFiltered = false;
+            filteredRecords = [];
+            displayRecords();
+        }
+
+        // Clear all records
+        function clearAllRecords() {
+            if (!confirm('Are you sure you want to delete ALL records? This cannot be undone!')) {
+                return;
+            }
+
+            if (!confirm('This will permanently delete all your time tracking data. Are you absolutely sure?')) {
+                return;
+            }
+
+            records = [];
+            saveRecords();
+            resetTimes();
+            clearFilter();
+            displayRecords();
+            alert('All records have been deleted');
+        }
+
+        // Initialize on page load
+        updateDateDisplay();
+        loadRecords();
+        initializeSpeechRecognition();
+        
+        // Set default filter dates (last 30 days)
+        const today = new Date();
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        
+        document.getElementById('filterTo').value = today.toISOString().split('T')[0];
+        document.getElementById('filterFrom').value = thirtyDaysAgo.toISOString().split('T')[0];
+        
+        // Update date display at midnight
+        setInterval(() => {
+            updateDateDisplay();
+        }, 60000); // Check every minute
+    </script>
+</body>
+</html>
