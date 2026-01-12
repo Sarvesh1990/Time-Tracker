@@ -679,6 +679,52 @@
             border-left: 5px solid #667eea;
         }
 
+        .current-time-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .time-display-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .time-display-box.has-value {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+        }
+
+        .time-display-box h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .time-display-box .time-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            font-family: 'Courier New', monospace;
+        }
+
+        .time-display-box .time-value.not-set {
+            color: #999;
+            font-size: 1em;
+            font-weight: normal;
+        }
+
         .input-mode-tabs {
             display: flex;
             gap: 10px;
@@ -960,6 +1006,11 @@
             .quick-buttons {
                 grid-template-columns: 1fr;
             }
+
+            .current-time-display {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
         }
     </style>
 </head>
@@ -1027,6 +1078,18 @@
                         </button>
                     </div>
                     <div class="voice-status" id="voiceStatus"></div>
+                </div>
+
+                <!-- Current Time Display (Common for all modes) -->
+                <div class="current-time-display">
+                    <div class="time-display-box" id="timeInBox">
+                        <h4>⏱️ Time In</h4>
+                        <div class="time-value not-set" id="currentTimeIn">Not set</div>
+                    </div>
+                    <div class="time-display-box" id="timeOutBox">
+                        <h4>🛑 Time Out</h4>
+                        <div class="time-value not-set" id="currentTimeOut">Not set</div>
+                    </div>
                 </div>
             </div>
 
@@ -1479,10 +1542,7 @@
         }
 
         function updateDateDisplay() {
-            const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
-            
+            // Check if date changed
             const newDate = getTodayDateString();
             if (newDate !== currentDate) {
                 currentDate = newDate;
@@ -1548,13 +1608,49 @@
             const saveBtn = document.getElementById('saveBtn');
             const entriesContainer = document.getElementById('entriesContainer');
             const entriesList = document.getElementById('entriesList');
+            
+            // Update current time display boxes
+            const currentTimeIn = document.getElementById('currentTimeIn');
+            const currentTimeOut = document.getElementById('currentTimeOut');
+            const timeInBox = document.getElementById('timeInBox');
+            const timeOutBox = document.getElementById('timeOutBox');
 
             if (todayEntries.length === 0) {
                 durationEl.textContent = '--:--:--';
                 detailsEl.textContent = 'Add a time entry to start tracking';
                 saveBtn.disabled = true;
                 entriesContainer.style.display = 'none';
+                
+                // Reset time display boxes
+                currentTimeIn.textContent = 'Not set';
+                currentTimeIn.classList.add('not-set');
+                timeInBox.classList.remove('has-value');
+                currentTimeOut.textContent = 'Not set';
+                currentTimeOut.classList.add('not-set');
+                timeOutBox.classList.remove('has-value');
                 return;
+            }
+
+            // Update current time display with last entry
+            const lastEntry = todayEntries[todayEntries.length - 1];
+            if (lastEntry.timeIn) {
+                currentTimeIn.textContent = formatTime(lastEntry.timeIn);
+                currentTimeIn.classList.remove('not-set');
+                timeInBox.classList.add('has-value');
+            } else {
+                currentTimeIn.textContent = 'Not set';
+                currentTimeIn.classList.add('not-set');
+                timeInBox.classList.remove('has-value');
+            }
+            
+            if (lastEntry.timeOut) {
+                currentTimeOut.textContent = formatTime(lastEntry.timeOut);
+                currentTimeOut.classList.remove('not-set');
+                timeOutBox.classList.add('has-value');
+            } else {
+                currentTimeOut.textContent = 'Not set';
+                currentTimeOut.classList.add('not-set');
+                timeOutBox.classList.remove('has-value');
             }
 
             // Calculate total duration from all complete entries
