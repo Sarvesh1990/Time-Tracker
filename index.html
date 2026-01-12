@@ -37,8 +37,10 @@
         }
 
         .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
+            font-size: 1.2em;
+            opacity: 0.95;
+            font-weight: 300;
+            letter-spacing: 0.5px;
         }
 
         @keyframes slideDown {
@@ -54,10 +56,15 @@
 
         .container {
             background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            margin-bottom: 30px;
+            padding: 45px;
+            border-radius: 24px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25), 0 10px 30px rgba(0, 0, 0, 0.15);
+            margin-bottom: 35px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .container:hover {
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3), 0 15px 35px rgba(0, 0, 0, 0.2);
         }
 
         .tracker-grid {
@@ -170,8 +177,16 @@
         .save-btn {
             background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             color: white;
-            grid-column: 1 / -1;
-            font-size: 1.1em;
+            font-size: 1.2em;
+            padding: 18px 50px;
+            display: block;
+            margin: 0 auto;
+            max-width: 400px;
+            box-shadow: 0 6px 20px rgba(17, 153, 142, 0.3);
+        }
+
+        .save-btn:hover {
+            box-shadow: 0 8px 25px rgba(17, 153, 142, 0.4);
         }
 
         .save-btn:disabled {
@@ -196,13 +211,14 @@
         .difference-display {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 30px;
-            border-radius: 15px;
+            padding: 35px;
+            border-radius: 18px;
             text-align: center;
-            margin-bottom: 25px;
-            max-width: 600px;
+            margin-bottom: 30px;
+            max-width: 650px;
             margin-left: auto;
             margin-right: auto;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
         }
 
         .difference-display h2 {
@@ -211,11 +227,12 @@
         }
 
         .duration {
-            font-size: 3.5em;
+            font-size: 4em;
             font-weight: bold;
             font-family: 'Courier New', monospace;
-            margin: 20px 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin: 25px 0;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.25);
+            letter-spacing: 2px;
         }
 
         .details {
@@ -464,9 +481,14 @@
         /* Records Table Styles */
         .records-container {
             background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 45px;
+            border-radius: 24px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25), 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .records-container:hover {
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3), 0 15px 35px rgba(0, 0, 0, 0.2);
         }
 
         .filter-section {
@@ -520,9 +542,13 @@
             border-bottom: 1px solid #e0e0e0;
         }
 
+        table tbody tr {
+            transition: all 0.2s ease;
+        }
+
         table tbody tr:hover {
-            background: #f5f5f5;
-            transition: background 0.2s ease;
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+            transform: scale(1.005);
         }
 
         .no-records {
@@ -543,6 +569,24 @@
             background: #c82333;
         }
 
+        .edit-record-btn {
+            padding: 6px 12px;
+            font-size: 0.85em;
+            background: #667eea;
+            color: white;
+            margin-right: 5px;
+        }
+
+        .edit-record-btn:hover {
+            background: #5568d3;
+        }
+
+        .record-actions {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+
         .stats-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -551,12 +595,18 @@
         }
 
         .stat-box {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 25px;
-            border-radius: 12px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%);
+            padding: 28px;
+            border-radius: 14px;
             text-align: center;
-            border-left: 4px solid #667eea;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #667eea;
+            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.25);
         }
 
         .stat-box .stat-value {
@@ -637,15 +687,16 @@
         }
 
         .date-selector {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            border-left: 5px solid #667eea;
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            border-left: 6px solid #667eea;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 18px;
             flex-wrap: wrap;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
         }
 
         .date-selector label {
@@ -672,11 +723,12 @@
         }
 
         .unified-input-section {
-            background: #f9f9f9;
-            padding: 25px;
-            border-radius: 15px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+            padding: 30px;
+            border-radius: 16px;
             margin-bottom: 25px;
-            border-left: 5px solid #667eea;
+            border-left: 6px solid #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
         }
 
         .current-time-display {
@@ -1785,7 +1837,12 @@
                         <td><strong>${formatDate(record.date)}</strong><br><small>${record.date}</small></td>
                         <td><small>${entriesHtml}</small></td>
                         <td><strong>${formatDuration(totalDiff.hours, totalDiff.minutes, totalDiff.seconds)}</strong></td>
-                        <td><button class="delete-btn" onclick="deleteRecord('${record.date}')">Delete</button></td>
+                        <td>
+                            <div class="record-actions">
+                                <button class="edit-record-btn" onclick="editRecord('${record.date}')">Edit</button>
+                                <button class="delete-btn" onclick="deleteRecord('${record.date}')">Delete</button>
+                            </div>
+                        </td>
                     </tr>
                 `;
             }).join('');
@@ -1812,6 +1869,29 @@
 
             document.getElementById('avgDuration').textContent = `${avgHours}h ${avgMinutes}m`;
             document.getElementById('totalHours').textContent = `${totalHours}h`;
+        }
+
+        function editRecord(date) {
+            // Set the selected date
+            selectedDate = date;
+            document.getElementById('selectedDate').value = date;
+            
+            // Load the record for that date
+            const record = allRecords.find(r => r.date === date);
+            if (record) {
+                todayEntries = record.entries.map(e => ({
+                    timeIn: new Date(e.timeIn),
+                    timeOut: new Date(e.timeOut)
+                }));
+            } else {
+                todayEntries = [];
+            }
+            
+            updateDateLabel();
+            updateDisplay();
+            
+            // Scroll to the tracker section
+            document.querySelector('.container').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function deleteRecord(date) {
