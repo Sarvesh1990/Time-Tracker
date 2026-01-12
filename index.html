@@ -610,6 +610,231 @@
             background: #c0392b;
         }
 
+        .entry-edit {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: background 0.2s ease;
+            margin-right: 5px;
+        }
+
+        .entry-edit:hover {
+            background: #2980b9;
+        }
+
+        .entry-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .date-selector {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .date-selector label {
+            font-weight: 600;
+            color: #333;
+            font-size: 1em;
+        }
+
+        .date-selector input[type="date"] {
+            padding: 12px 15px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .date-selector button {
+            padding: 12px 20px;
+            font-size: 0.95em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .unified-input-section {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 5px solid #667eea;
+        }
+
+        .input-mode-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .tab-btn:hover {
+            color: #667eea;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .input-mode-content {
+            display: none;
+        }
+
+        .input-mode-content.active {
+            display: block;
+        }
+
+        .quick-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #667eea;
+            border: none;
+            padding: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+        }
+
+        .close-btn:hover {
+            color: #333;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .modal-input-group {
+            margin-bottom: 15px;
+        }
+
+        .modal-input-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .modal-input-group input[type="time"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .modal-actions button {
+            padding: 12px 24px;
+            font-size: 1em;
+        }
+
         @media (max-width: 768px) {
             .tracker-grid {
                 grid-template-columns: 1fr;
@@ -689,6 +914,39 @@
 
             .modal-content {
                 width: 95%;
+                padding: 20px;
+            }
+
+            .date-selector {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .date-selector input[type="date"],
+            .date-selector button {
+                width: 100%;
+                min-width: auto;
+            }
+
+            .input-mode-tabs {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .tab-btn {
+                border-bottom: 1px solid #e0e0e0;
+                border-left: 3px solid transparent;
+                text-align: left;
+                padding-left: 15px;
+            }
+
+            .tab-btn.active {
+                border-left-color: #667eea;
+                border-bottom-color: #e0e0e0;
+            }
+
+            .quick-buttons {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -696,7 +954,7 @@
 <body>
     <div class="main-container">
         <div class="header">
-            <h1>⏰ Time Tracker Pro</h1>
+            <h3>⏰ Time Tracker Pro</h3>
             <p>Track your time with ease - Voice, Manual, and Multiple Entries</p>
         </div>
 
@@ -706,32 +964,51 @@
                 📅 <span id="currentDate"></span>
             </div>
 
-            <div class="tracker-grid">
-                <div class="time-display">
-                    <div class="time-box">
-                        <h3>Time In</h3>
-                        <div class="time not-set" id="timeInDisplay">Not set</div>
-                    </div>
-                    <div class="time-box">
-                        <h3>Time Out</h3>
-                        <div class="time not-set" id="timeOutDisplay">Not set</div>
-                    </div>
-                </div>
-
-                <div class="buttons">
-                    <button class="time-in-btn" onclick="setTimeIn()">⏱️ Time In (Now)</button>
-                    <button class="time-out-btn" onclick="setTimeOut()">🛑 Time Out (Now)</button>
-                </div>
+            <!-- Date Selector for Historical Dates -->
+            <div class="date-selector">
+                <label for="selectedDate">📅 Select Date:</label>
+                <input type="date" id="selectedDate" onchange="loadSelectedDate()">
+                <button onclick="goToToday()">Go to Today</button>
             </div>
 
-            <!-- Voice and Manual Entry Section -->
-            <div class="input-methods">
-                <!-- Voice Commands -->
-                <div class="voice-section">
-                    <div class="voice-header">
-                        <h4>🎤 Voice Commands</h4>
-                        <button class="info-icon" onclick="openModal()" title="Voice commands help">?</button>
+            <!-- Unified Input Section -->
+            <div class="unified-input-section">
+                <h3>⏲️ Add Time Entry</h3>
+                <div class="input-mode-tabs">
+                    <button class="tab-btn active" onclick="switchTab('quick')">⚡ Quick Entry</button>
+                    <button class="tab-btn" onclick="switchTab('manual')">✏️ Manual Entry</button>
+                    <button class="tab-btn" onclick="switchTab('voice')">🎤 Voice Entry</button>
+                </div>
+
+                <!-- Quick Entry Mode -->
+                <div id="quickMode" class="input-mode-content active">
+                    <p style="color: #666; margin-bottom: 15px;">Click to record current time</p>
+                    <div class="quick-buttons">
+                        <button class="time-in-btn" onclick="setTimeIn()">⏱️ Time In (Now)</button>
+                        <button class="time-out-btn" onclick="setTimeOut()">🛑 Time Out (Now)</button>
                     </div>
+                </div>
+
+                <!-- Manual Entry Mode -->
+                <div id="manualMode" class="input-mode-content">
+                    <p style="color: #666; margin-bottom: 15px;">Enter specific times manually</p>
+                    <div class="manual-inputs">
+                        <div class="manual-input-group">
+                            <label for="manualTimeIn">Time In:</label>
+                            <input type="time" id="manualTimeIn">
+                            <button class="time-in-btn" onclick="setManualTimeIn()">Add Time In</button>
+                        </div>
+                        <div class="manual-input-group">
+                            <label for="manualTimeOut">Time Out:</label>
+                            <input type="time" id="manualTimeOut">
+                            <button class="time-out-btn" onclick="setManualTimeOut()">Add Time Out</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Voice Entry Mode -->
+                <div id="voiceMode" class="input-mode-content">
+                    <p style="color: #666; margin-bottom: 15px;">Use your voice to record time - <button onclick="openVoiceHelp()" style="background: none; border: none; color: #667eea; text-decoration: underline; cursor: pointer; padding: 0;">How it works?</button></p>
                     <div class="voice-controls">
                         <button class="voice-btn" id="voiceTimeInBtn" onclick="startVoiceCommand('in')">
                             🎤 Voice Time In
@@ -742,27 +1019,6 @@
                     </div>
                     <div class="voice-status" id="voiceStatus"></div>
                 </div>
-
-                <!-- Manual Time Entry -->
-                <div class="manual-section">
-                    <h4 style="color: #333; margin-bottom: 10px; margin-top: 20px;">✏️ Manual Time Entry</h4>
-                    <div class="manual-inputs">
-                        <div class="manual-input-group">
-                            <label for="manualTimeIn">Set Time In:</label>
-                            <input type="time" id="manualTimeIn">
-                            <button class="time-in-btn" onclick="setManualTimeIn()">Set Time In</button>
-                        </div>
-                        <div class="manual-input-group">
-                            <label for="manualTimeOut">Set Time Out:</label>
-                            <input type="time" id="manualTimeOut">
-                            <button class="time-out-btn" onclick="setManualTimeOut()">Set Time Out</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="buttons">
-                <button class="reset-btn" onclick="resetTimes()">🔄 Reset Today</button>
             </div>
 
             <div class="difference-display">
@@ -770,7 +1026,10 @@
                 <div class="duration" id="durationDisplay">--:--:--</div>
                 <div class="details" id="detailsDisplay">Click "Time In" to start tracking</div>
                 <div id="entriesContainer" style="display: none; margin-top: 20px;">
-                    <p style="margin-bottom: 10px; font-weight: 600;">Today's Entries:</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <p style="margin: 0; font-weight: 600;"><span id="dateEntriesLabel">Today's</span> Entries:</p>
+                        <button class="reset-btn" onclick="resetTimes()" style="padding: 8px 16px; font-size: 0.9em;">🔄 Clear All</button>
+                    </div>
                     <div class="entries-list" id="entriesList"></div>
                 </div>
             </div>
@@ -834,7 +1093,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2>🎤 Voice Commands</h2>
-                <button class="close-btn" onclick="closeModal()">&times;</button>
+                <button class="close-btn" onclick="closeVoiceModal()">&times;</button>
             </div>
             <div class="info-box">
                 <p><strong>How to use Voice Commands:</strong></p>
@@ -850,28 +1109,168 @@
         </div>
     </div>
 
+    <!-- Edit Entry Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✏️ Edit Time Entry</h2>
+                <button class="close-btn" onclick="closeEditModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-input-group">
+                    <label for="editTimeIn">Time In:</label>
+                    <input type="time" id="editTimeIn">
+                </div>
+                <div class="modal-input-group">
+                    <label for="editTimeOut">Time Out:</label>
+                    <input type="time" id="editTimeOut">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button onclick="closeEditModal()" style="background: #999;">Cancel</button>
+                <button onclick="saveEditedEntry()" class="save-btn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let currentDate = getTodayDateString();
+        let selectedDate = currentDate;
         let todayEntries = [];
         let allRecords = [];
         let filteredRecords = [];
         let isFiltered = false;
         let recognition = null;
         let currentVoiceMode = null;
+        let editingEntryIndex = null;
+
+        // Tab Switching
+        function switchTab(tabName) {
+            // Remove active class from all tabs and contents
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.input-mode-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to selected tab and content
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Mode').classList.add('active');
+        }
+
+        // Date Selection Functions
+        function loadSelectedDate() {
+            const dateInput = document.getElementById('selectedDate');
+            selectedDate = dateInput.value;
+            currentDate = selectedDate;
+            
+            const record = allRecords.find(r => r.date === selectedDate);
+            if (record) {
+                todayEntries = record.entries.map(e => ({
+                    timeIn: new Date(e.timeIn),
+                    timeOut: new Date(e.timeOut)
+                }));
+            } else {
+                todayEntries = [];
+            }
+            
+            updateDateLabel();
+            updateDisplay();
+        }
+
+        function goToToday() {
+            const today = getTodayDateString();
+            selectedDate = today;
+            currentDate = today;
+            document.getElementById('selectedDate').value = today;
+            loadTodayData();
+            updateDateLabel();
+        }
+
+        function updateDateLabel() {
+            const today = getTodayDateString();
+            const label = document.getElementById('dateEntriesLabel');
+            if (selectedDate === today) {
+                label.textContent = "Today's";
+            } else {
+                const date = new Date(selectedDate);
+                label.textContent = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            }
+        }
+
+        // Edit Entry Functions
+        function openEditModal(index) {
+            editingEntryIndex = index;
+            const entry = todayEntries[index];
+            
+            const timeInInput = document.getElementById('editTimeIn');
+            const timeOutInput = document.getElementById('editTimeOut');
+            
+            timeInInput.value = formatTimeForInput(entry.timeIn);
+            timeOutInput.value = entry.timeOut ? formatTimeForInput(entry.timeOut) : '';
+            
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('show');
+            editingEntryIndex = null;
+        }
+
+        function saveEditedEntry() {
+            const timeInInput = document.getElementById('editTimeIn').value;
+            const timeOutInput = document.getElementById('editTimeOut').value;
+            
+            if (!timeInInput) {
+                alert('Please enter Time In');
+                return;
+            }
+            
+            const [inHours, inMinutes] = timeInInput.split(':');
+            const timeInDate = new Date(selectedDate);
+            timeInDate.setHours(parseInt(inHours), parseInt(inMinutes), 0, 0);
+            
+            let timeOutDate = null;
+            if (timeOutInput) {
+                const [outHours, outMinutes] = timeOutInput.split(':');
+                timeOutDate = new Date(selectedDate);
+                timeOutDate.setHours(parseInt(outHours), parseInt(outMinutes), 0, 0);
+                
+                if (timeOutDate < timeInDate) {
+                    alert('Time Out cannot be before Time In!');
+                    return;
+                }
+            }
+            
+            todayEntries[editingEntryIndex] = {
+                timeIn: timeInDate,
+                timeOut: timeOutDate
+            };
+            
+            updateDisplay();
+            closeEditModal();
+        }
+
+        function formatTimeForInput(date) {
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
 
         // Modal Functions
-        function openModal() {
+        function openVoiceHelp() {
             document.getElementById('voiceModal').classList.add('show');
         }
 
-        function closeModal() {
+        function closeVoiceModal() {
             document.getElementById('voiceModal').classList.remove('show');
         }
 
         window.onclick = function(event) {
-            const modal = document.getElementById('voiceModal');
-            if (event.target === modal) {
-                closeModal();
+            const voiceModal = document.getElementById('voiceModal');
+            const editModal = document.getElementById('editModal');
+            if (event.target === voiceModal) {
+                closeVoiceModal();
+            }
+            if (event.target === editModal) {
+                closeEditModal();
             }
         }
 
@@ -1122,7 +1521,8 @@
 
         function resetTimes() {
             if (todayEntries.length > 0) {
-                if (!confirm('Are you sure you want to reset today\'s entries?')) {
+                const dateLabel = selectedDate === getTodayDateString() ? 'today\'s' : 'these';
+                if (!confirm(`Are you sure you want to clear ${dateLabel} entries?`)) {
                     return;
                 }
             }
@@ -1139,33 +1539,13 @@
             const saveBtn = document.getElementById('saveBtn');
             const entriesContainer = document.getElementById('entriesContainer');
             const entriesList = document.getElementById('entriesList');
-            const timeInDisplay = document.getElementById('timeInDisplay');
-            const timeOutDisplay = document.getElementById('timeOutDisplay');
 
             if (todayEntries.length === 0) {
                 durationEl.textContent = '--:--:--';
-                detailsEl.textContent = 'Click "Time In" to start tracking';
+                detailsEl.textContent = 'Add a time entry to start tracking';
                 saveBtn.disabled = true;
                 entriesContainer.style.display = 'none';
-                timeInDisplay.textContent = 'Not set';
-                timeInDisplay.classList.add('not-set');
-                timeOutDisplay.textContent = 'Not set';
-                timeOutDisplay.classList.add('not-set');
                 return;
-            }
-
-            // Update time displays with last entry
-            const lastEntry = todayEntries[todayEntries.length - 1];
-            if (lastEntry.timeIn) {
-                timeInDisplay.textContent = formatTime(lastEntry.timeIn);
-                timeInDisplay.classList.remove('not-set');
-            }
-            if (lastEntry.timeOut) {
-                timeOutDisplay.textContent = formatTime(lastEntry.timeOut);
-                timeOutDisplay.classList.remove('not-set');
-            } else {
-                timeOutDisplay.textContent = 'Not set';
-                timeOutDisplay.classList.add('not-set');
             }
 
             // Calculate total duration from all complete entries
@@ -1197,7 +1577,10 @@
                 return `
                     <div class="entry-item">
                         <span><span class="entry-time">${formatTime(entry.timeIn)}</span> → <span class="entry-time">${entry.timeOut ? formatTime(entry.timeOut) : '?'}</span> (${durationText})</span>
-                        <button class="entry-remove" onclick="removeEntry(${index})">Remove</button>
+                        <div class="entry-actions">
+                            <button class="entry-edit" onclick="openEditModal(${index})">Edit</button>
+                            <button class="entry-remove" onclick="removeEntry(${index})">Remove</button>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -1214,12 +1597,11 @@
                 return;
             }
 
-            const today = getTodayDateString();
-            const existingIndex = allRecords.findIndex(r => r.date === today);
+            const existingIndex = allRecords.findIndex(r => r.date === selectedDate);
             
             let proceed = true;
             if (existingIndex >= 0) {
-                const choice = confirm('A record for today already exists. Click OK to ADD new entries, or Cancel to REPLACE.');
+                const choice = confirm('A record for this date already exists. Click OK to ADD new entries, or Cancel to REPLACE.');
                 if (!choice) {
                     allRecords.splice(existingIndex, 1);
                 } else {
@@ -1246,7 +1628,7 @@
                 });
 
                 const record = {
-                    date: today,
+                    date: selectedDate,
                     entries: completeEntries.map(e => ({ timeIn: e.timeIn.toISOString(), timeOut: e.timeOut.toISOString() })),
                     totalDuration: totalMs
                 };
@@ -1329,8 +1711,9 @@
             allRecords = allRecords.filter(r => r.date !== date);
             saveRecords();
             
-            if (date === getTodayDateString()) {
-                resetTimes();
+            if (date === selectedDate) {
+                todayEntries = [];
+                updateDisplay();
             }
             
             if (isFiltered) {
@@ -1483,6 +1866,11 @@
         
         document.getElementById('filterTo').value = today.toISOString().split('T')[0];
         document.getElementById('filterFrom').value = thirtyDaysAgo.toISOString().split('T')[0];
+        
+        // Initialize selected date to today
+        document.getElementById('selectedDate').value = getTodayDateString();
+        selectedDate = getTodayDateString();
+        updateDateLabel();
         
         setInterval(() => {
             updateDateDisplay();
